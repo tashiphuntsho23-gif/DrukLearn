@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DrukLearn - Bhutan Education</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        header {
+            background: #123c69;
+            color: white;
+            padding: 22px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        header p {
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .hero {
+            background: #e4efff;
+            padding: 55px 8%;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 35px;
+            color: #123c69;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        .container {
+            padding: 35px 8%;
+        }
+
+        .filters {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 20px 0 30px;
+        }
+
+        input, select {
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .books {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(210px, 1fr));
+            gap: 22px;
+        }
+
+        .book {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #00000010;
+        }
+
+        .book-icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        .book h3 {
+            color: #123c69;
+            margin-bottom: 10px;
+        }
+
+        .book p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            background: #123c69;
+            color: white;
+            padding: 11px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2364a3;
+        }
+
+        #preview {
+            display: none;
+            background: white;
+            padding: 25px;
+            margin-top: 25px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        footer {
+            background: #123c69;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 50px;
+        }
+
+        @media(max-width: 600px) {
+            .hero h2 {
+                font-size: 26px;
+            }
+
+            header {
+                padding: 20px;
+            }
+
+            .container {
+                padding: 25px 5%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div>
+            <h1>📚 DrukLearn</h1>
+            <p>Learn anywhere. Grow everywhere.</p>
+        </div>
+
+        <div>Bhutan Education 🇧🇹</div>
+    </header>
+
+    <section class="hero">
+        <h2>Your Learning Journey Starts Here</h2>
+
+        <p>
+            Explore textbooks from Pre-Primary
+            to Class XII.
+        </p>
+
+        <button onclick="scrollToBooks()">
+            Explore Textbooks
+        </button>
+    </section>
+
+    <section class="container" id="library">
+
+        <h2>📖 Textbook Library</h2>
+
+        <p>Find your textbooks by class or subject.</p>
+
+        <div class="filters">
+
+            <input
+                type="text"
+                id="search"
+                placeholder="Search textbooks..."
+                oninput="filterBooks()"
+            >
+
+            <select id="classFilter" onchange="filterBooks()">
+                <option value="">All Classes</option>
+                <option>PP</option>
+                <option>Class I</option>
+                <option>Class II</option>
+                <option>Class III</option>
+                <option>Class IV</option>
+                <option>Class V</option>
+                <option>Class VI</option>
+                <option>Class VII</option>
+                <option>Class VIII</option>
+                <option>Class IX</option>
+                <option>Class X</option>
+                <option>Class XI</option>
+                <option>Class XII</option>
+            </select>
+
+            <select id="subjectFilter" onchange="filterBooks()">
+                <option value="">All Subjects</option>
+                <option>Dzongkha</option>
+                <option>English</option>
+                <option>Mathematics</option>
+                <option>Science</option>
+                <option>Social Studies</option>
+                <option>Accountancy</option>
+            </select>
+
+        </div>
+
+        <div class="books" id="bookList"></div>
+
+        <div id="preview">
+            <h2 id="previewTitle"></h2>
+            <p id="previewInfo"></p>
+            <br>
+            <button onclick="closePreview()">Close</button>
+        </div>
+
+    </section>
+
+    <footer>
+        <p>© 2026 DrukLearn | Made for Bhutan 🇧🇹</p>
+        <p>Learn anywhere. Grow everywhere.</p>
+    </footer>
+
+    <script>
+
+        const books = [
+            {
+                title: "Dzongkha Textbook",
+                className: "Class XII",
+                subject: "Dzongkha"
+            },
+            {
+                title: "English Textbook",
+                className: "Class XII",
+                subject: "English"
+            },
+            {
+                title: "Mathematics Textbook",
+                className: "Class XII",
+                subject: "Mathematics"
+            },
+            {
+                title: "Science Textbook",
+                className: "Class X",
+                subject: "Science"
+            },
+            {
+                title: "Social Studies Textbook",
+                className: "Class IX",
+                subject: "Social Studies"
+            },
+            {
+                title: "Accountancy Textbook",
+                className: "Class XII",
+                subject: "Accountancy"
+            },
+            {
+                title: "Dzongkha Textbook",
+                className: "Class VI",
+                subject: "Dzongkha"
+            },
+            {
+                title: "English Textbook",
+                className: "Class V",
+                subject: "English"
+            }
+        ];
+
+        function displayBooks(list) {
+
+            const bookList = document.getElementById("bookList");
+
+            bookList.innerHTML = "";
+
+            if (list.length === 0) {
+                bookList.innerHTML = "<p>No textbooks found.</p>";
+                return;
+            }
+
+            list.forEach(book => {
+
+                bookList.innerHTML += `
+                    <div class="book">
+
+                        <div class="book-icon">📘</div>
+
+                        <h3>${book.title}</h3>
+
+                        <p>${book.className}</p>
+
+                        <p>${book.subject}</p>
+
+                        <button onclick="openPreview(
+                            '${book.title}',
+                            '${book.className}',
+                            '${book.subject}'
+                        )">
+                            View Textbook
+                        </button>
+
+                    </div>
+                `;
+
+            });
+        }
+
+        function filterBooks() {
+
+            const search = document
+                .getElementById("search")
+                .value.toLowerCase();
+
+            const selectedClass = document
+                .getElementById("classFilter")
+                .value;
+
+            const selectedSubject = document
+                .getElementById("subjectFilter")
+                .value;
+
+            const filtered = books.filter(book => {
+
+                return (
+                    book.title.toLowerCase().includes(search) &&
+                    (selectedClass === "" ||
+                     book.className === selectedClass) &&
+                    (selectedSubject === "" ||
+                     book.subject === selectedSubject)
+                );
+
+            });
+
+            displayBooks(filtered);
+        }
+
+        function openPreview(title, className, subject) {
+
+            document.getElementById("preview").style.display = "block";
+
+            document.getElementById("previewTitle").innerText = title;
+
+            document.getElementById("previewInfo").innerText =
+                className + " | " + subject +
+                " | Actual textbook PDF will be connected here.";
+
+            document.getElementById("preview").scrollIntoView({
+                behavior: "smooth"
+            });
+        }
+
+        function closePreview() {
+            document.getElementById("preview").style.display = "none";
+        }
+
+        function scrollToBooks() {
+            document.getElementById("library").scrollIntoView({
+                behavior: "smooth"
+            });
+        }
+
+        displayBooks(books);
+
+    </script>
+
+</body>
+</html>
